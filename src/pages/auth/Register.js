@@ -8,8 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 function Register({ onRegister }) {
   const navigate = useNavigate()
 
-  const isAuthenticated = localStorage.getItem('authToken')
-  
+  const currentUser = localStorage.getItem('currentUser')
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -17,8 +17,8 @@ function Register({ onRegister }) {
     label: '',
     password_confirm: ''
   })
-  
-  if (isAuthenticated) {
+
+  if (currentUser !== null) {
     navigate('/dashboard/welcome')
     return null
   }

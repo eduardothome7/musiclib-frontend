@@ -8,19 +8,15 @@ import Navbar from './components/Navbar';
 import api from "../src/services/api";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem("isAuthenticated") === "true"
-  )
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const handleLogin = (user, token) => {
-    localStorage.setItem("isAuthenticated", "true")
     localStorage.setItem("authToken", token)
     localStorage.setItem("currentUser", JSON.stringify(user))
     setIsAuthenticated(true)
   }
 
   const handleRegister = (user, token) => {
-    localStorage.setItem("isAuthenticated", "true")
     localStorage.setItem("authToken", token)
     localStorage.setItem("currentUser", JSON.stringify(user))
     setIsAuthenticated(true)
@@ -29,9 +25,8 @@ function App() {
   const handleLogout = () => {
     api.logout(localStorage.getItem("authToken"))
     .then(() => {
-        localStorage.setItem("isAuthenticated", "false")
-        localStorage.setItem("authToken", null)
-        localStorage.setItem("currentUser", null)
+        localStorage.removeItem("authToken")
+        localStorage.removeItem("currentUser")
         setIsAuthenticated(false)
       })
       .catch(error => {
