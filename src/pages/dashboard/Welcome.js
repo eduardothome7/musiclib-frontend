@@ -1,10 +1,11 @@
 import React from "react"
+import { Link } from "react-router-dom"
 
 function Welcome() {
   return(
     <div>
       <h3>Dashboard</h3>
-      <p>Você está autenticado</p>
+      <Link to="/artists/index">Artistas</Link>
     </div>
   )
 }

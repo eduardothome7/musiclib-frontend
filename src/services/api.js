@@ -1,52 +1,29 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  }
+  baseURL: process.env.REACT_APP_BACKEND_API_URL
 })
 
-const login = async (email, password) => {
-  try {
-    const response = await api.post("/auth/sign_in", { 
-        email: email,
-        password: password
-     })
+const fetchArtists = async () => {
+    try {
+      const authToken = localStorage.getItem('authToken')
 
-    return response.data
-  } catch (error) {
-    throw error
+      console.log(authToken)
+
+      const response = await api.get("/artists", {
+        headers: {
+          "Content-Type": "application/json",
+          "Token": authToken
+        }
+      })
+  
+      return response.data
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   }
-}
-
-const logout = async (authToken) => {
-  try {
-    const response = await api.delete("/auth/log_out", {
-      headers: {
-         "Content-Type": "application/json",
-        Token: authToken
-      }
-    })
-
-    return response.data
-  } catch (error) {
-    throw error
-  }
-}
-
-const register = async(user) => {
-  try {
-    const response = await api.post("/auth/sign_up", user)
-
-    return response.data
-  } catch (error) {
-    throw error
-  }
-}
 
 export default {
-  login,
-  logout,
-  register
+  fetchArtists
 }

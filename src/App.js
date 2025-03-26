@@ -1,14 +1,16 @@
 import './App.css';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import Dashboard from './pages/dashboard/Welcome'
-import Navbar from './components/Navbar';
-import api from "../src/services/api";
+import ArtistList from './pages/artists/List'
+import ArtistAdd from './pages/artists/Add'
+import api from "./services/auth";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem("authToken"));
 
   const handleLogin = (user, token) => {
     localStorage.setItem("authToken", token)
@@ -39,10 +41,11 @@ function App() {
       <Navbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
       <div class="container">
         <Routes>
-          <Route path="/" element={<Login onLogin={handleLogin} />} />
+          <Route path="/" element={ isAuthenticated ? <Navigate to="/dashboard/welcome" /> : <Login onLogin={handleLogin} /> } />
           <Route path="/register" element={<Register onRegister={handleRegister} />} />
-          <Route 
-            path="/dashboard/welcome" element={isAuthenticated ? <Dashboard/> : <Navigate to="/" /> } />
+          <Route path="/dashboard/welcome" element={isAuthenticated ? <Dashboard/> : <Navigate to="/" /> } />
+          <Route path="/artists/index" element={isAuthenticated ? <ArtistList/> : <Navigate to="/" /> } />
+          <Route path="/artists/add" element={isAuthenticated ? <ArtistAdd/> : <Navigate to="/" /> } />
         </Routes>
       </div>
     </Router>
