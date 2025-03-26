@@ -8,8 +8,6 @@ const fetchArtists = async () => {
     try {
       const authToken = localStorage.getItem('authToken')
 
-      console.log(authToken)
-
       const response = await api.get("/artists", {
         headers: {
           "Content-Type": "application/json",
@@ -24,6 +22,24 @@ const fetchArtists = async () => {
     }
   }
 
+  const saveArtist = async (data) => {
+    try {
+      const authToken = localStorage.getItem('authToken')
+
+      const response = await api.post("/artists", data, {
+        headers: {
+          "Content-Type": "application/json",
+          "Token": authToken
+        }
+      })
+
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
 export default {
-  fetchArtists
+  fetchArtists,
+  saveArtist
 }

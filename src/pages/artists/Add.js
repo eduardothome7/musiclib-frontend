@@ -1,23 +1,72 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import api from "../../services/api"
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Form, ToastContainer } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 function Add() {
-  const [artists, setArtists] = useState([]);
-  const [error, setError] = useState(null);
+  const currentUser = localStorage.getItem('currentUser')
+  const navigate = useNavigate()
+
+  const [formData, setFormData] = useState({
+    name: '',
+    user_id: JSON.parse(currentUser).id
+  })
+
+  if (!currentUser) {
+    toast.error("Usuário não autenticado!");
+    navigate("/");
+    return;
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    try {
+      api.saveArtist(formData)
+        .then(() => {
+          navigate("/artists/index?toast_success=Cadastro realizado com sucesso")
+        })
+        .catch(error => {
+          if (error.response !== undefined) {
+            toast.error(error.response.data)
+          } else {
+            console.log(error)
+            toast.error('Erro ao cadastrar')
+          }
+        });
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  }
 
   return (
     <div>
       <h3>Cadastrar Artista</h3>
-      {error && <p>{error}</p>}
-      <Row>
-        <Col className="text-end">
-          <Button type="submit" variant="primary">
-            Salvar
-          </Button>
-        </Col>
-      </Row>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="name">
+          <Form.Label>Nome *</Form.Label>
+            <Form.Control
+              type="text"
+              name="name"
+              placeholder="Nome do artista/banda"
+              required
+              value={formData.name}
+              onChange={handleChange}
+            />
+        </Form.Group>
+
+        <Button type="submit" variant="primary" className="mt-3">
+          Registrar
+        </Button>
+      </Form>
+  
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar newestOnTop />
     </div>
   )
 }
