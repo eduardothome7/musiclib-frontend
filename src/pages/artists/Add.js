@@ -31,7 +31,6 @@ function Add() {
           if (error.response !== undefined) {
             toast.error(error.response.data)
           } else {
-            console.log(error)
             toast.error('Erro ao cadastrar')
           }
         });
@@ -62,7 +61,7 @@ function Add() {
         </Form.Group>
 
         <Button type="submit" variant="primary" className="mt-3">
-          Registrar
+          Salvar
         </Button>
       </Form>
   

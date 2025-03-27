@@ -54,7 +54,6 @@ function Register({ onRegister }) {
           if (error.response !== undefined) {
             toast.error(error.response.data)
           } else {
-            console.log(error)
             toast.error('Erro ao cadastrar')
           }
         });

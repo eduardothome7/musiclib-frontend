@@ -17,12 +17,11 @@ const fetchArtists = async () => {
   
       return response.data
     } catch (error) {
-      console.log(error)
       throw error
     }
   }
 
-  const saveArtist = async (data) => {
+const saveArtist = async (data) => {
     try {
       const authToken = localStorage.getItem('authToken')
 
@@ -39,7 +38,61 @@ const fetchArtists = async () => {
     }
   }
 
+const deleteArtist = async (id) => {
+  try {
+    const authToken = localStorage.getItem('authToken')
+
+    const response = await api.delete("/artists/" + id, {
+      headers: {
+        "Content-Type": "application/json",
+        "Token": authToken
+      }
+    })
+
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+const saveSong = async (data) => {
+  try {
+    const authToken = localStorage.getItem('authToken')
+
+    const response = await api.post("/songs", data, {
+      headers: {
+        "Content-Type": "application/json",
+        "Token": authToken
+      }
+    })
+
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+const fetchSongs = async () => {
+  try {
+    const authToken = localStorage.getItem('authToken')
+
+    const response = await api.get("/songs", {
+      headers: {
+        "Content-Type": "application/json",
+        "Token": authToken
+      }
+    })
+
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
 export default {
   fetchArtists,
-  saveArtist
+  saveArtist,
+  deleteArtist,
+  saveSong,
+  fetchSongs
 }

@@ -8,6 +8,8 @@ import Register from './pages/auth/Register'
 import Dashboard from './pages/dashboard/Welcome'
 import ArtistList from './pages/artists/List'
 import ArtistAdd from './pages/artists/Add'
+import SongList from './pages/songs/List'
+import SongAdd from './pages/songs/Add'
 import api from "./services/auth";
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -52,7 +54,7 @@ function App() {
         setIsAuthenticated(false);
       })
       .catch(error => {
-        console.log(error);
+        //
       });
   };
 
@@ -67,6 +69,8 @@ function App() {
           <Route path="/dashboard/welcome" element={isAuthenticated ? <Dashboard/> : <Navigate to="/" /> } />
           <Route path="/artists/index" element={isAuthenticated ? <ArtistList/> : <Navigate to="/" /> } />
           <Route path="/artists/add" element={isAuthenticated ? <ArtistAdd/> : <Navigate to="/" /> } />
+          <Route path="/songs/list" element={isAuthenticated ? <SongList/> : <Navigate to="/" /> } />
+          <Route path="/songs/add" element={isAuthenticated ? <SongAdd/> : <Navigate to="/" /> } />
         </Routes>
       </div>
     </Router>
