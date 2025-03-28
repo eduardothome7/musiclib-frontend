@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import api from "../../services/api"
-import { Button, Col, Row } from "react-bootstrap"
-import { toast } from "react-toastify"
-// import ArtistCard from "../../components/artists/ArtistCard"
+import Breadcrumb from "../../components/Breadcrumb";
+import { Col, Row } from "react-bootstrap";
 
 function List() {
+
+  const breadcrumbItems = [
+    { label: "Home", path: "/" },
+    { label: "Músicas", path: "/songs" },
+  ];
+
   const [songs, setSongs] = useState([])
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     async function loadSongs() {
@@ -20,26 +26,43 @@ function List() {
     loadSongs();
   }, [])
 
-  const handleDelete = (songId) => {
-    try {
-      api.deleteSong(songId)
-      setSongs((prevSongs) => prevSongs.filter((song) => song.id !== songId))
-      toast.success(`Artista #${songId} removido com sucesso.`)
-    } catch (err) {
-      toast.error("Erro ao remover artista")
-    }
-  }
+  const filteredSongs = songs.filter(
+    (artist) =>
+      artist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      artist.songs.some((song) =>
+        song.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+  );
 
   return (
     <div>
-      <h3>Lista de Músicas</h3>
+      <Breadcrumb items={breadcrumbItems} />
+
       <Row>
+        <Col>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Pesquisar por artista(s) ou música"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </Col>
         <Col className="text-end">
           <Link to="/artists/add" className="btn btn-outline-primary me-2">Cadastrar Artista</Link>
           <Link to="/songs/add" className="btn btn-primary">Cadastrar Música</Link>
         </Col>
       </Row><br></br>
       <Row>
+      {filteredSongs.map((artist) => (
+        <div key={artist.id}>
+          <h4>{artist.name}</h4>
+          {artist.songs.map((song) => (
+            <p key={song.id}>{song.title}</p>
+          ))}
+          <br />
+        </div>
+      ))}
       </Row>
     </div>
   )

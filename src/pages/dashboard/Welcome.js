@@ -5,7 +5,12 @@ function Welcome() {
   return(
     <div>
       <h3>Dashboard</h3>
-      <Link to="/artists/index">Artistas</Link>
+      <p>
+        <Link to="/artists/index">Artistas</Link>
+      </p>
+      <p>
+        <Link to="/songs/list">Músicas</Link>
+      </p>
     </div>
   )
 }
